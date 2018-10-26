@@ -16,6 +16,8 @@ using RealtimeFramework.Messaging;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Windows.Media.SpeechRecognition;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace UWPChat
 {
@@ -47,7 +49,7 @@ namespace UWPChat
 
         void OnConnected(object sender)
         {
-            Log("Connected to Realtime\n", true);
+            Log("Connected to Mr Bootloop\n", true);
 
             // Subscribe the Realtime channel
             ortcClient.Subscribe("chat", true, OnMessageCallback);
@@ -60,6 +62,7 @@ namespace UWPChat
 
         private void OnMessageCallback(object sender, string channel, string message)
         {
+
             Debug.WriteLine("Received message: " + message);
 
             Message parsedMessage = JsonConvert.DeserializeObject<Message>(message);
@@ -68,8 +71,11 @@ namespace UWPChat
             // check if message is from another user
             if(!parsedMessage.id.Equals(myID))
             {
+                // Send SMS to Twilio on RX
+                send_sms(Messages.Text);
                 // Say the message
                 Speak(parsedMessage.text);
+
             }
         }
 
@@ -91,11 +97,37 @@ namespace UWPChat
             mediaElement.Play();
         }
 
+
+
+        public void send_sms(string message)
+        {
+
+            //Twilio
+            // Find your Account Sid and Token at twilio.com/console
+            const string accountSid = "AC511421812db6750bf90b4f3244888bc0";
+            const string authToken = "402e001c68978a3c1463d010e361d501";
+
+
+            //Initilize twilio
+            TwilioClient.Init(accountSid, authToken);
+
+            var SMS_message = MessageResource.Create(
+              body: message,
+              from: new Twilio.Types.PhoneNumber("+4915735988650"),
+              to: new Twilio.Types.PhoneNumber("+4917666539063")
+            );
+
+        }
+
+
+
+
+
         private async void SpokenMessage_Click(object sender, RoutedEventArgs e)
         {
             SpeechRecognizer speechRecognizer = new SpeechRecognizer();
             await speechRecognizer.CompileConstraintsAsync();
-            speechRecognizer.UIOptions.AudiblePrompt = "Say the message you want to send ...";
+            speechRecognizer.UIOptions.AudiblePrompt = "What can Mr Bootloop do for you ...";
             string spokenMessage = "";
 
             // Start recognition.
@@ -142,7 +174,10 @@ namespace UWPChat
 
                 string jsonMessage = JsonConvert.SerializeObject(message);
                 Debug.WriteLine("Sending message: " + jsonMessage);
-                ortcClient.Send("chat", jsonMessage);
+                //ortcClient.Send("chat", jsonMessage);
+                send_sms(jsonMessage);
+
+
             }
         }
     }

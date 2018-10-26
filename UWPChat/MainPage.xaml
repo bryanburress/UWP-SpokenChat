@@ -5,10 +5,11 @@
     xmlns:local="using:UWPChat"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="Dark">
 
     <Grid Margin="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="Messages" Margin="0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="176" FontFamily="Segoe UI Semibold" FontSize="24"/>
-        <Button x:Name="SpokenMessage" Content="Send a spoken message" HorizontalAlignment="Left" Margin="0,190,0,0" VerticalAlignment="Top" Click="SpokenMessage_Click"/>
+        <TextBlock x:Name="Messages" Margin="20" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="176" FontFamily="Segoe UI Semibold" FontSize="24"/>
+        <Button x:Name="SpokenMessage"  Content="Mr Bootloop " HorizontalAlignment="Center" Margin="0,224,0,0" VerticalAlignment="Top" FontSize="24"  Click="SpokenMessage_Click" Height="111" Width="1480"/>
     </Grid>
 </Page>
